@@ -1,0 +1,20 @@
+[advisories]
+vulnerability = "deny"
+unmaintained = "deny"
+notice = "deny"
+unsound = "deny"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+
+[licenses]
+unlicensed = "deny"
+copyleft = "deny"
+
+allow = [
+  "MIT",
+  "BSD-3-Clause",
+  "Apache-2.0",
+  "Unicode-DFS-2016"
+]

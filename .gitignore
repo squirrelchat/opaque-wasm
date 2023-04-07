@@ -1,0 +1,12 @@
+.idea
+.vscode
+.DS_Store
+
+*.local
+
+/target
+**/*.rs.bk
+Cargo.lock
+bin/
+pkg/
+wasm-pack.log
