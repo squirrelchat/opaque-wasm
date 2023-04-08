@@ -22,11 +22,11 @@ wasm-bindgen = "0.2.84"
 js-sys = "0.3.61"
 lol_alloc = "0.3"
 
-opaque-ke = { version = "3.0.0-pre.2", default-features = false, features = [ "ristretto255-voprf", "argon2" ] }
-argon2 = { version = "0.5", default-features = false, features = [ "alloc" ] }
+opaque-ke = { version = "3.0.0-pre.2", default-features = false, features = ["ristretto255-voprf", "argon2"] }
+argon2 = { version = "0.5", default-features = false, features = ["alloc"] }
 
-rand = { version = "0.8", default-features = false, features = [ "getrandom" ] }
-getrandom = { version = "0.2", default-features = false, features = [ "js" ] }
+rand = { version = "0.8", default-features = false, features = ["getrandom"] }
+getrandom = { version = "0.2", default-features = false, features = ["js"] }
 
 [profile.release]
 opt-level = "s"

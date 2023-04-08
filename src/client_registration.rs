@@ -24,12 +24,13 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+use crate::cipher::create_argon2;
 use crate::cipher::DefaultCipher;
 use alloc::vec::Vec;
 use js_sys::{Object, Reflect, Uint8Array};
 use opaque_ke::{
 	errors::ProtocolError, ClientRegistration as OpaqueClientRegistration,
-	ClientRegistrationFinishParameters, RegistrationResponse,
+	ClientRegistrationFinishParameters, Identifiers, RegistrationResponse,
 };
 use rand::rngs::OsRng;
 
@@ -46,7 +47,7 @@ pub struct ClientRegistration {
 #[wasm_bindgen]
 impl ClientRegistration {
 	#[wasm_bindgen(getter, js_name = "request")]
-	pub fn get_message(&self) -> Vec<u8> {
+	pub fn get_request(&self) -> Vec<u8> {
 		self.request.clone()
 	}
 
@@ -58,7 +59,7 @@ impl ClientRegistration {
 			&mut self.rng,
 			&self.password[..],
 			message,
-			ClientRegistrationFinishParameters::default(),
+			ClientRegistrationFinishParameters::new(Identifiers::default(), Some(&create_argon2())),
 		);
 
 		match finish_result {

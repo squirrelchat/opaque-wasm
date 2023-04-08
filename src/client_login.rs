@@ -24,12 +24,13 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+use crate::cipher::create_argon2;
 use crate::cipher::DefaultCipher;
 use alloc::vec::Vec;
 use js_sys::{Object, Reflect, Uint8Array};
 use opaque_ke::{
 	errors::ProtocolError, ClientLogin as OpaqueClientLogin, ClientLoginFinishParameters,
-	CredentialResponse,
+	CredentialResponse, Identifiers,
 };
 use rand::rngs::OsRng;
 
@@ -45,7 +46,7 @@ pub struct ClientLogin {
 #[wasm_bindgen]
 impl ClientLogin {
 	#[wasm_bindgen(getter, js_name = "request")]
-	pub fn get_message(&self) -> Vec<u8> {
+	pub fn get_request(&self) -> Vec<u8> {
 		self.request.clone()
 	}
 
@@ -56,7 +57,7 @@ impl ClientLogin {
 		let finish_result = self.state.finish(
 			&self.password[..],
 			message,
-			ClientLoginFinishParameters::default(),
+			ClientLoginFinishParameters::new(None, Identifiers::default(), Some(&create_argon2())),
 		);
 
 		match finish_result {

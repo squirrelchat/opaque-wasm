@@ -35,7 +35,7 @@ use lol_alloc::{AssumeSingleThreaded, FreeListAllocator};
 #[cfg(feature = "client")]
 #[global_allocator]
 static ALLOCATOR: AssumeSingleThreaded<FreeListAllocator> =
-    unsafe { AssumeSingleThreaded::new(FreeListAllocator::new()) };
+	unsafe { AssumeSingleThreaded::new(FreeListAllocator::new()) };
 
 mod cipher;
 
