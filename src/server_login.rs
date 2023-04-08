@@ -26,6 +26,7 @@
 
 use crate::cipher::DefaultCipher;
 use crate::server::Server;
+use alloc::vec::Vec;
 use js_sys::{Object, Reflect, Uint8Array};
 use opaque_ke::{
 	CredentialFinalization, CredentialRequest, ServerLogin, ServerLoginStartParameters,

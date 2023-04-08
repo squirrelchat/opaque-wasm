@@ -25,6 +25,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 use crate::cipher::DefaultCipher;
+use alloc::vec::Vec;
 use opaque_ke::ServerSetup;
 use rand::rngs::OsRng;
 

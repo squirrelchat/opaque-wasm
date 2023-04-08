@@ -26,6 +26,7 @@
 
 use crate::cipher::DefaultCipher;
 use crate::server::Server;
+use alloc::vec::Vec;
 use opaque_ke::{RegistrationRequest, RegistrationUpload, ServerRegistration};
 
 use wasm_bindgen::prelude::*;

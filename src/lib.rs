@@ -24,6 +24,19 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#![no_std]
+
+extern crate alloc;
+
+#[cfg(feature = "client")]
+use lol_alloc::{AssumeSingleThreaded, FreeListAllocator};
+
+// SAFETY: This application is single threaded, so using AssumeSingleThreaded is allowed.
+#[cfg(feature = "client")]
+#[global_allocator]
+static ALLOCATOR: AssumeSingleThreaded<FreeListAllocator> =
+    unsafe { AssumeSingleThreaded::new(FreeListAllocator::new()) };
+
 mod cipher;
 
 #[cfg(feature = "client")]
