@@ -24,7 +24,6 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-use crate::cipher::DefaultCipher;
 use crate::server::Server;
 use alloc::vec::Vec;
 use js_sys::{Object, Reflect, Uint8Array};
@@ -32,6 +31,7 @@ use opaque_ke::{
 	CredentialFinalization, CredentialRequest, ServerLogin, ServerLoginStartParameters,
 	ServerRegistration,
 };
+use opaque_wasm_core::OpaqueWasmCipherSuite;
 
 use wasm_bindgen::prelude::*;
 
@@ -49,7 +49,7 @@ impl Server {
 
 		let registration_record = match record {
 			Some(bytes) => Some(
-				ServerRegistration::<DefaultCipher>::deserialize(&bytes)
+				ServerRegistration::<OpaqueWasmCipherSuite>::deserialize(&bytes)
 					.or::<JsValue>(Err("could not deserialize record".into()))?,
 			),
 			None => None,
@@ -84,7 +84,7 @@ impl Server {
 
 	#[wasm_bindgen(js_name = "finishLogin")]
 	pub fn finish_login(&self, state: &[u8], finish: &[u8]) -> Result<Vec<u8>, JsValue> {
-		let login = ServerLogin::<DefaultCipher>::deserialize(state)
+		let login = ServerLogin::<OpaqueWasmCipherSuite>::deserialize(state)
 			.or::<JsValue>(Err("could not deserialize state".into()))?;
 
 		let message = CredentialFinalization::deserialize(finish)

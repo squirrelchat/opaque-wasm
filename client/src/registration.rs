@@ -24,14 +24,14 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-use crate::cipher::create_argon2;
-use crate::cipher::DefaultCipher;
 use alloc::vec::Vec;
 use js_sys::{Object, Reflect, Uint8Array};
 use opaque_ke::{
 	errors::ProtocolError, ClientRegistration as OpaqueClientRegistration,
 	ClientRegistrationFinishParameters, Identifiers, RegistrationResponse,
 };
+use opaque_wasm_core::create_argon2;
+use opaque_wasm_core::OpaqueWasmCipherSuite;
 use rand::rngs::OsRng;
 
 use wasm_bindgen::prelude::*;
@@ -41,7 +41,7 @@ pub struct ClientRegistration {
 	rng: OsRng,
 	password: Vec<u8>,
 	request: Vec<u8>,
-	state: OpaqueClientRegistration<DefaultCipher>,
+	state: OpaqueClientRegistration<OpaqueWasmCipherSuite>,
 }
 
 #[wasm_bindgen]
@@ -89,7 +89,7 @@ impl ClientRegistration {
 pub fn start_registration(password: &str) -> Result<ClientRegistration, JsValue> {
 	let mut rng = OsRng;
 	let password_bytes = password.as_bytes();
-	OpaqueClientRegistration::<DefaultCipher>::start(&mut rng, password_bytes)
+	OpaqueClientRegistration::<OpaqueWasmCipherSuite>::start(&mut rng, password_bytes)
 		.or(Err("failed to start registration".into()))
 		.map(|result| ClientRegistration {
 			rng,

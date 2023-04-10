@@ -24,40 +24,32 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-use crate::cipher::DefaultCipher;
-use alloc::vec::Vec;
-use opaque_ke::ServerSetup;
-use rand::rngs::OsRng;
+#![no_std]
 
-use wasm_bindgen::prelude::*;
+use argon2::{Argon2, ParamsBuilder};
+use opaque_ke::ciphersuite::CipherSuite;
+use opaque_ke::key_exchange::tripledh::TripleDh;
+use opaque_ke::Ristretto255;
 
-#[wasm_bindgen]
-pub struct Server {
-	pub(crate) rng: OsRng,
-	pub(crate) internal: ServerSetup<DefaultCipher>,
+pub struct OpaqueWasmCipherSuite;
+impl CipherSuite for OpaqueWasmCipherSuite {
+	type OprfCs = Ristretto255;
+	type KeGroup = Ristretto255;
+	type KeyExchange = TripleDh;
+	type Ksf = Argon2<'static>;
 }
 
-#[wasm_bindgen]
-impl Server {
-	#[wasm_bindgen(constructor)]
-	pub fn new(state: Option<Vec<u8>>) -> Result<Server, JsValue> {
-		let mut rng = OsRng;
-
-		let setup = match state {
-			Some(s) => {
-				ServerSetup::deserialize(&s).or::<JsValue>(Err("invalid server state".into()))?
-			}
-			None => ServerSetup::new(&mut rng),
-		};
-
-		Ok(Server {
-			rng,
-			internal: setup,
-		})
-	}
-
-	#[wasm_bindgen(js_name = "getState")]
-	pub fn get_state(&self) -> Vec<u8> {
-		self.internal.serialize().to_vec()
-	}
+pub fn create_argon2() -> Argon2<'static> {
+	Argon2::new(
+		argon2::Algorithm::Argon2id,
+		argon2::Version::V0x13,
+		// Reference: second recommended option from RFC 9106
+		// https://www.rfc-editor.org/rfc/rfc9106.html#name-parameter-choice
+		ParamsBuilder::new()
+			.t_cost(3)
+			.p_cost(4)
+			.m_cost(1 << 16)
+			.build()
+			.unwrap(),
+	)
 }

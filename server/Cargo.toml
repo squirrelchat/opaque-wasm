@@ -1,0 +1,23 @@
+[package]
+name = "opaque-wasm-server"
+version = "0.1.0"
+authors = ["Cynthia <cyyynthia@borkenware.com>"]
+repository = "https://github.com/squirrelchat/opaque-wasm"
+description = "WebAssembly wrapper for facebook/opaque-ke (server-side)"
+license = "BSD-3-Clause"
+
+rust-version = "1.65"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = "0.2.84"
+js-sys = "0.3.61"
+
+opaque-wasm-core = { path = "../core" }
+opaque-ke = { version = "3.0.0-pre.2", default-features = false }
+
+rand = { version = "0.8", default-features = false, features = ["getrandom"] }
+getrandom = { version = "0.2", default-features = false, features = ["js"] }

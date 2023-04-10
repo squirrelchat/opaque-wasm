@@ -1,12 +1,11 @@
+# Editors & personal files
 .idea
 .vscode
 .DS_Store
-
 *.local
 
+# Rust
 /target
-**/*.rs.bk
-Cargo.lock
-bin/
 pkg/
+**/*.rs.bk
 wasm-pack.log

@@ -24,29 +24,36 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#![no_std]
+use crate::server::Server;
+use alloc::vec::Vec;
+use opaque_ke::{RegistrationRequest, RegistrationUpload, ServerRegistration};
+use opaque_wasm_core::OpaqueWasmCipherSuite;
 
-extern crate alloc;
+use wasm_bindgen::prelude::*;
 
-#[cfg(feature = "client")]
-use lol_alloc::{AssumeSingleThreaded, FreeListAllocator};
+#[wasm_bindgen]
+impl Server {
+	#[wasm_bindgen(js_name = "startRegistration")]
+	pub fn start_registration(&self, identifier: &str, request: &[u8]) -> Result<Vec<u8>, JsValue> {
+		let message = RegistrationRequest::deserialize(request)
+			.or::<JsValue>(Err("could not deserialize registration request".into()))?;
 
-// SAFETY: This application is single threaded, so using AssumeSingleThreaded is allowed.
-#[cfg(feature = "client")]
-#[global_allocator]
-static ALLOCATOR: AssumeSingleThreaded<FreeListAllocator> =
-	unsafe { AssumeSingleThreaded::new(FreeListAllocator::new()) };
+		let result = ServerRegistration::<OpaqueWasmCipherSuite>::start(
+			&self.internal,
+			message,
+			identifier.as_bytes(),
+		)
+		.or::<JsValue>(Err("could not start registration".into()))?;
 
-mod cipher;
+		Ok(result.message.serialize().to_vec())
+	}
 
-#[cfg(feature = "client")]
-pub mod client_login;
-#[cfg(feature = "client")]
-pub mod client_registration;
+	#[wasm_bindgen(js_name = "finishRegistration")]
+	pub fn finish_registration(&self, registration_record: &[u8]) -> Result<Vec<u8>, JsValue> {
+		let upload = RegistrationUpload::<OpaqueWasmCipherSuite>::deserialize(registration_record)
+			.or::<JsValue>(Err("could not deserialize upload".into()))?;
 
-#[cfg(feature = "server")]
-pub mod server;
-#[cfg(feature = "server")]
-pub mod server_login;
-#[cfg(feature = "server")]
-pub mod server_registration;
+		let result = ServerRegistration::<OpaqueWasmCipherSuite>::finish(upload);
+		Ok(result.serialize().to_vec())
+	}
+}

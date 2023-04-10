@@ -24,30 +24,40 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-use argon2::{Argon2, ParamsBuilder};
-use opaque_ke::ciphersuite::CipherSuite;
-use opaque_ke::key_exchange::tripledh::TripleDh;
-use opaque_ke::Ristretto255;
+use alloc::vec::Vec;
+use opaque_ke::ServerSetup;
+use opaque_wasm_core::OpaqueWasmCipherSuite;
+use rand::rngs::OsRng;
 
-pub struct DefaultCipher;
-impl CipherSuite for DefaultCipher {
-	type OprfCs = Ristretto255;
-	type KeGroup = Ristretto255;
-	type KeyExchange = TripleDh;
-	type Ksf = Argon2<'static>;
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+pub struct Server {
+	pub(crate) rng: OsRng,
+	pub(crate) internal: ServerSetup<OpaqueWasmCipherSuite>,
 }
 
-pub fn create_argon2() -> Argon2<'static> {
-	Argon2::new(
-		argon2::Algorithm::Argon2id,
-		argon2::Version::V0x13,
-		// Reference: second recommended option from RFC 9106
-		// https://www.rfc-editor.org/rfc/rfc9106.html#name-parameter-choice
-		ParamsBuilder::new()
-			.t_cost(3)
-			.p_cost(4)
-			.m_cost(1 << 16)
-			.build()
-			.unwrap(),
-	)
+#[wasm_bindgen]
+impl Server {
+	#[wasm_bindgen(constructor)]
+	pub fn new(state: Option<Vec<u8>>) -> Result<Server, JsValue> {
+		let mut rng = OsRng;
+
+		let setup = match state {
+			Some(s) => {
+				ServerSetup::deserialize(&s).or::<JsValue>(Err("invalid server state".into()))?
+			}
+			None => ServerSetup::new(&mut rng),
+		};
+
+		Ok(Server {
+			rng,
+			internal: setup,
+		})
+	}
+
+	#[wasm_bindgen(js_name = "getState")]
+	pub fn get_state(&self) -> Vec<u8> {
+		self.internal.serialize().to_vec()
+	}
 }

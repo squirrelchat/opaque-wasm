@@ -1,33 +1,12 @@
-[package]
-name = "opaque-wasm"
-version = "0.1.0"
-authors = ["Cynthia <cyyynthia@borkenware.com>"]
-repository = "https://github.com/squirrelchat/opaque-wasm"
-description = "WebAssembly wrapper for facebook/opaque-ke"
-license = "BSD-3-Clause"
-
-rust-version = "1.65"
-edition = "2021"
-
-[lib]
-crate-type = ["cdylib", "rlib"]
-
-[features]
-default = ["client", "server"]
-client = []
-server = []
-
-[dependencies]
-wasm-bindgen = "0.2.84"
-js-sys = "0.3.61"
-lol_alloc = "0.3"
-
-opaque-ke = { version = "3.0.0-pre.2", default-features = false, features = ["ristretto255-voprf", "argon2"] }
-argon2 = { version = "0.5", default-features = false, features = ["alloc"] }
-
-rand = { version = "0.8", default-features = false, features = ["getrandom"] }
-getrandom = { version = "0.2", default-features = false, features = ["js"] }
+[workspace]
+members = [
+  "client",
+  "server",
+  "core",
+]
 
 [profile.release]
-opt-level = "s"
+lto = true
+opt-level = 3
+panic = "abort"
 strip = "debuginfo"

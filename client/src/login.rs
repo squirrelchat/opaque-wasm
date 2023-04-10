@@ -24,14 +24,14 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-use crate::cipher::create_argon2;
-use crate::cipher::DefaultCipher;
 use alloc::vec::Vec;
 use js_sys::{Object, Reflect, Uint8Array};
 use opaque_ke::{
 	errors::ProtocolError, ClientLogin as OpaqueClientLogin, ClientLoginFinishParameters,
 	CredentialResponse, Identifiers,
 };
+use opaque_wasm_core::create_argon2;
+use opaque_wasm_core::OpaqueWasmCipherSuite;
 use rand::rngs::OsRng;
 
 use wasm_bindgen::prelude::*;
@@ -40,7 +40,7 @@ use wasm_bindgen::prelude::*;
 pub struct ClientLogin {
 	password: Vec<u8>,
 	request: Vec<u8>,
-	state: OpaqueClientLogin<DefaultCipher>,
+	state: OpaqueClientLogin<OpaqueWasmCipherSuite>,
 }
 
 #[wasm_bindgen]
@@ -90,7 +90,7 @@ impl ClientLogin {
 pub fn start_login(password: &str) -> Result<ClientLogin, JsValue> {
 	let mut rng = OsRng;
 	let password_bytes = password.as_bytes();
-	OpaqueClientLogin::<DefaultCipher>::start(&mut rng, password_bytes)
+	OpaqueClientLogin::<OpaqueWasmCipherSuite>::start(&mut rng, password_bytes)
 		.or(Err("failed to start login".into()))
 		.map(|result| ClientLogin {
 			password: password_bytes.to_vec(),
