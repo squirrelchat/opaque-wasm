@@ -1,0 +1,5 @@
+node_modules
+dist
+
+opaque-state.bin
+db.sqlite3

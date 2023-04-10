@@ -1,0 +1,68 @@
+/**
+ * Copyright (c) Squirrel Chat et al.
+ * SPDX-License-Identifier: 0BSD
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+ * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.forms {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  column-gap: 4rem;
+  row-gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.infobox {
+  padding: 1em;
+  border-radius: 8px;
+  border: 1px solid;
+  margin-bottom: 2em;
+}
+
+.infobox:empty {
+  display: none;
+}
+
+.infobox.success {
+  border-color: #26c94f;
+  background-color: #26c94f33;
+}
+
+.infobox.error {
+  border-color: #db5759;
+  background-color: #db575933;
+}
+
+.binary {
+  font-family: monospace;
+  font-size: 1.1em;
+  background-color: #eee;
+  border: 1px #aaa solid;
+  white-space: pre-line;
+  padding: 0.75em 1em;
+  margin-top: 1rem;
+}
+
+.binary:empty {
+  display: none;
+}

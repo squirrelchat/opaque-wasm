@@ -1,0 +1,26 @@
+{
+	"name": "@squirrelchat/opaque-example-app",
+	"description": "Example application using the opaque-wasm library",
+	"repository": "git@github.com:squirrelchat/opaque-wasm.git",
+	"license": "0BSD",
+	"private": true,
+	"type": "module",
+	"engines": {
+		"node": ">= 16",
+		"pnpm": ">= 7.24"
+	},
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"start": "node server.js"
+	},
+	"dependencies": {
+		"@squirrelchat/opaque-wasm-client": "file:../client/pkg",
+		"@squirrelchat/opaque-wasm-server": "file:../server/pkg",
+		"sqlite3": "^5.1.6"
+	},
+	"devDependencies": {
+		"vite": "^4.2.1",
+		"vite-plugin-wasm": "^3.2.2"
+	}
+}

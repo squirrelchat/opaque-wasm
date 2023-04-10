@@ -66,14 +66,14 @@ impl Server {
 
 		match start_result {
 			Ok(result) => {
-				let message_buffer = Uint8Array::new(&320.into());
+				let response_buffer = Uint8Array::new(&320.into());
 				let state_buffer = Uint8Array::new(&192.into());
 
-				message_buffer.copy_from(result.message.serialize().as_slice());
+				response_buffer.copy_from(result.message.serialize().as_slice());
 				state_buffer.copy_from(result.state.serialize().as_slice());
 
 				let object = Object::new();
-				Reflect::set(&object, &"message".into(), &message_buffer).unwrap();
+				Reflect::set(&object, &"response".into(), &response_buffer).unwrap();
 				Reflect::set(&object, &"state".into(), &state_buffer).unwrap();
 
 				Ok(object)

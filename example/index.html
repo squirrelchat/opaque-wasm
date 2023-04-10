@@ -1,0 +1,83 @@
+<!--
+	Copyright (c) Squirrel Chat et al.
+
+	Permission to use, copy, modify, and/or distribute this software for any
+	purpose with or without fee is hereby granted.
+
+	THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+	REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+	AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+	INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+	LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+	OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+	PERFORMANCE OF THIS SOFTWARE.
+-->
+<html lang='en'>
+	<head>
+		<meta charset='utf8'/>
+		<meta name='viewport' content='width=device-width, initial-scale=1'/>
+		<link rel='stylesgeet' href='./src/style.css'/>
+		<title>opaque-wasm demo</title>
+	</head>
+	<body>
+		<main>
+			<section>
+				<p>
+					This is a very minimal example of a register/login form using the OPAQUE protocol. Here are a handful
+					of neat things to observe about the protocol:
+				</p>
+				<ul>
+					<li>There is no password traffic. Check for yourself the exchange between the client and the server in the DevTools.</li>
+					<li>The server authenticates itself. You can valdiate the server's identity based on its public key, that doesn't change.</li>
+					<li>The protocol produces an "export key" that the server never learns and that is stable (i.e. it doesn't change).</li>
+					<li>The protocol produces a "session key" during login known by both parties and that changes every time you login.</li>
+				</ul>
+				<p>
+					The export key can be used to encrypt data the server should never learn, but that you want to recover later,
+					and the session key can be used to encrypt communications between you and the server for example. The only
+					thing limiting what you can do with these keys is your creativity!
+				</p>
+				<p>
+					You can learn more about OPAQUE by giving a look at the <a href='https://cfrg.github.io/draft-irtf-cfrg-opaque/draft-irtf-cfrg-opaque.html' target='_blank' rel='noreferrer'>Internet Draft for OPAQUE</a>.
+				</p>
+			</section>
+			<hr/>
+			<section class='forms'>
+				<section id='section-register'>
+					<h2>Register an account</h2>
+					<div class='infobox'></div>
+					<form id='form-register'>
+						<div class='field'>
+							<label for='register-username'>Username</label>
+							<input type='text' name='username' id='register-username' autocomplete='username'/>
+						</div>
+						<div class='field'>
+							<label for='register-username'>Password</label>
+							<input type='password' name='password' id='register-password' autocomplete='new-password' />
+						</div>
+						<button type='submit'>Register</button>
+						<div class='binary'></div>
+					</form>
+				</section>
+
+				<section id='section-login'>
+					<h2>Login with an existing account</h2>
+					<div class='infobox'></div>
+					<form id='form-login'>
+						<div class='field'>
+							<label for='login-username'>Username</label>
+							<input type='text' name='username' id='login-username' autocomplete='username'/>
+						</div>
+						<div class='field'>
+							<label for='login-username'>Password</label>
+							<input type='password' name='password' id='login-password' autocomplete='current-password' />
+						</div>
+						<button type='submit'>Login</button>
+						<div class='binary'></div>
+					</form>
+				</section>
+			</section>
+		</main>
+		<script src='./src/client.js' type='module'></script>
+	</body>
+</html>
