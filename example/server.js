@@ -243,4 +243,6 @@ const httpServer = createServer((req, res) => {
   res.writeHead(404).end('not found');
 })
 
-httpServer.listen(Number(process.env.PORT) || 1337, 'localhost')
+const port = Number(process.env.PORT) || 1337
+httpServer.listen(port, 'localhost')
+console.log(`Listening on http://localhost:${port}`)

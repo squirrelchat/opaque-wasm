@@ -6,6 +6,7 @@ the OPAQUE protocol.
 pnpm i
 pnpm run build
 pnpm run start
+# Go to http://localhost:1337 in your browser
 ```
 
 The server and the client are extremely minimal and only implements the required bits for the register and login flow.
