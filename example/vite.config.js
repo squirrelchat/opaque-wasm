@@ -1,6 +1,8 @@
 import wasm from 'vite-plugin-wasm'
+import topLevelAwait  from 'vite-plugin-top-level-await'
+
 export default {
-  plugins: [ wasm() ],
+  plugins: [ wasm(), topLevelAwait() ],
   server: {
     proxy: {
       '/registration': 'http://localhost:1337',

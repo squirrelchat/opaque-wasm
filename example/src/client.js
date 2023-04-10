@@ -85,7 +85,18 @@ document.getElementById('form-register').addEventListener('submit', async (evt) 
   // We get the server's identity (public key), an export key
   // (that the server does not know), and the record to send
   // to the server to finalize the process.
-  const { record, serverPublicKey, exportKey } = register.finish(response)
+  let result
+  try {
+    result = register.finish(response)
+  } catch (e) {
+    loginInfoBox.classList.add('error')
+    loginInfoBox.innerText = e === 'reflected value detected'
+      ? 'Protocol violation: server sent a reflected OPRF value.'
+      : 'Could not finalize registration'
+    return
+  }
+
+  const { record, serverPublicKey, exportKey } = result
   const resFinalize = await fetch('/registration/finalize', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -157,7 +168,18 @@ document.getElementById('form-login').addEventListener('submit', async (evt) => 
   //
   // The server public key can be verified to ensure we're talking
   // to the right server (i.e. the server authenticates itself).
-  const { message, serverPublicKey, sessionKey, exportKey } = login.finish(response)
+  let result
+  try {
+    result = login.finish(response)
+  } catch (e) {
+    loginInfoBox.classList.add('error')
+    loginInfoBox.innerText = e === 'reflected value detected'
+      ? 'Protocol violation: server sent a reflected OPRF value.'
+      : 'Bad credentials'
+    return
+  }
+
+  const { message, serverPublicKey, sessionKey, exportKey } = result
   const resFinalize = await fetch('/login/finalize', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },

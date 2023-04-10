@@ -212,6 +212,9 @@ const httpServer = createServer((req, res) => {
     if (req.url.startsWith('/assets/')) {
       const file = join('dist', normalize(req.url))
       if (existsSync(file)) {
+        if (file.endsWith('.css')) res.setHeader('content-type', 'text/css')
+        if (file.endsWith('.js')) res.setHeader('content-type', 'text/javascript')
+        if (file.endsWith('.wasm')) res.setHeader('content-type', 'application/wasm')
         createReadStream(join('dist', req.url)).pipe(res)
         return
       }

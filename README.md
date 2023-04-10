@@ -39,7 +39,7 @@ pnpm add @squirrelchat/opaque-wasm-server
 ```
 
 ## Usage
-A complete example is available in the [`examples`](examples) folder.
+A complete example is available in the [`example`](example) folder.
 
 ### Client
 ```js
