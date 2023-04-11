@@ -1,4 +1,9 @@
 # opaque-wasm
+
+[![License](https://img.shields.io/github/license/squirrelchat/opaque-wasm.svg?style=flat-square)](https://github.com/squirrelchat/opaque-wasm/blob/mistress/LICENSE)
+[![npm (client)](https://img.shields.io/npm/v/@squirrelchat/opaque-wasm-client?label=npm%20%28client%29&style=flat-square)](https://npm.im/@squirrelchat/opaque-wasm-client)
+[![npm (server)](https://img.shields.io/npm/v/@squirrelchat/opaque-wasm-server?label=npm%20%28server%29&style=flat-square)](https://npm.im/@squirrelchat/opaque-wasm-server)
+
 Wrapper for [opaque-ke](https://github.com/facebook/opaque-ke) to implement the OPAQUE protocol in JavaScript/WASM.
 
 This repo contains 2 packages: a client package and a server package. This allows an application to use this library
@@ -17,8 +22,6 @@ This library uses the following OPAQUE configuration, based on the recommendatio
 If you use different implementations for the client and server side, make sure to match the configurations accordingly.
 
 ## Installation
-> **Warning**: The packages have not been published yet.
-
 ### Client
 The client requires the use of a bundler compatible with WebAssembly ESM at this time.
 (e.g: [Vite](https://vitejs.dev/) with [`vite-plugin-wasm`](https://github.com/Menci/vite-plugin-wasm)).

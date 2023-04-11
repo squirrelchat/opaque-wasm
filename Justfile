@@ -1,4 +1,4 @@
-build: && _fix-typescript
+build: && _fix-typescript _fix-package-json
 	RUSTFLAGS='-C opt-level=s' wasm-pack build -s squirrelchat --release client
 	RUSTFLAGS='-C opt-level=3' wasm-pack build -s squirrelchat --release --target nodejs server
 
@@ -9,6 +9,10 @@ lint:
 	cargo deny check
 	cargo clippy
 	rustfmt --check client/**/*.rs core/**/*.rs server/**/*.rs
+
+publish: build
+	cd client/pkg && npm publish --access public
+	cd server/pkg && npm publish --access public
 
 # Replace `object` with proper types, something wasm-bindgen doesn't support because it's a piece of [redacted]
 # Oen could use skip_typescript and write all the types manually, but let's just do it this way for now eh.
@@ -24,3 +28,20 @@ _fix-typescript:
 
 	writeFileSync('client/pkg/opaque_wasm_client.d.ts', clientTypes)
 	writeFileSync('server/pkg/opaque_wasm_server.d.ts', serverTypes)
+	console.log('Fixed TypeScript types')
+
+# Have I mentioned how much of a [redacted] [redacted] piece of [redacted] wasm-pack [redacted] is?
+# https://github.com/rustwasm/wasm-pack/issues/1193 (Nov 13, 2022)
+# https://github.com/rustwasm/wasm-pack/pull/1194 (Nov 13, 2022) - PR still not merged :D
+_fix-package-json:
+	#!/usr/bin/env node
+	const { readFileSync, writeFileSync } = require('fs')
+	let clientPackage = readFileSync('client/pkg/package.json', 'utf8')
+	let serverPackage = readFileSync('server/pkg/package.json', 'utf8')
+
+	clientPackage = clientPackage.replace('.d.ts"', '.d.ts",\n    "opaque_wasm_client_bg.wasm.d.ts"')
+	serverPackage = serverPackage.replace('.d.ts"', '.d.ts",\n    "opaque_wasm_server_bg.wasm.d.ts"')
+
+	writeFileSync('client/pkg/package.json', clientPackage)
+	writeFileSync('server/pkg/package.json', serverPackage)
+	console.log('Fixed package.json `files`')
