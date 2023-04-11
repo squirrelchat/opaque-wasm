@@ -35,6 +35,14 @@ use opaque_wasm_core::OpaqueWasmCipherSuite;
 
 use wasm_bindgen::prelude::*;
 
+#[wasm_bindgen(typescript_custom_section)]
+const TS_APPEND_CONTENT: &'static str = r#"
+export type ServerRegistration = {
+	response: Uint8Array,
+	state: Uint8Array,
+}
+"#;
+
 #[wasm_bindgen]
 impl Server {
 	#[wasm_bindgen(js_name = "startLogin")]

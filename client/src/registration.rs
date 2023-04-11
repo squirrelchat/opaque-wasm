@@ -36,6 +36,15 @@ use rand::rngs::OsRng;
 
 use wasm_bindgen::prelude::*;
 
+#[wasm_bindgen(typescript_custom_section)]
+const TS_APPEND_CONTENT: &'static str = r#"
+export type ClientRegistrationResult = {
+	exportKey: Uint8Array,
+	serverPublicKey: Uint8Array,
+	record: Uint8Array,
+}
+"#;
+
 #[wasm_bindgen]
 pub struct ClientRegistration {
 	rng: OsRng,

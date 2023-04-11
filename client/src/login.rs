@@ -36,6 +36,16 @@ use rand::rngs::OsRng;
 
 use wasm_bindgen::prelude::*;
 
+#[wasm_bindgen(typescript_custom_section)]
+const TS_APPEND_CONTENT: &'static str = r#"
+export type ClientLoginResult = {
+	message: Uint8Array,
+	serverPublicKey: Uint8Array,
+	sessionKey: Uint8Array,
+	exportKey: Uint8Array,
+}
+"#;
+
 #[wasm_bindgen]
 pub struct ClientLogin {
 	password: Vec<u8>,
