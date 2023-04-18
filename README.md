@@ -1,5 +1,4 @@
 # opaque-wasm
-
 [![License](https://img.shields.io/github/license/squirrelchat/opaque-wasm.svg?style=flat-square)](https://github.com/squirrelchat/opaque-wasm/blob/mistress/LICENSE)
 [![npm (client)](https://img.shields.io/npm/v/@squirrelchat/opaque-wasm-client?label=npm%20%28client%29&style=flat-square)](https://npm.im/@squirrelchat/opaque-wasm-client)
 [![npm (server)](https://img.shields.io/npm/v/@squirrelchat/opaque-wasm-server?label=npm%20%28server%29&style=flat-square)](https://npm.im/@squirrelchat/opaque-wasm-server)
@@ -21,86 +20,11 @@ This library uses the following OPAQUE configuration, based on the recommendatio
 
 If you use different implementations for the client and server side, make sure to match the configurations accordingly.
 
-## Installation
-### Client
-The client requires the use of a bundler compatible with WebAssembly ESM at this time.
-(e.g: [Vite](https://vitejs.dev/) with [`vite-plugin-wasm`](https://github.com/Menci/vite-plugin-wasm)).
+## Installation and usage
+See the [`client`](client) and [`server`](server) folders for more information about the bits you need.
 
-```
-npm i @squirrelchat/opaque-wasm-client
-yarn add @squirrelchat/opaque-wasm-client
-pnpm add @squirrelchat/opaque-wasm-client
-```
-
-### Server
-The server is only compatible with Node at this time.
-
-```
-npm i @squirrelchat/opaque-wasm-server
-yarn add @squirrelchat/opaque-wasm-server
-pnpm add @squirrelchat/opaque-wasm-server
-```
-
-## Usage
-A complete example is available in the [`example`](example) folder.
-
-### Client
-```js
-import { startRegistration, startLogin } from '@squirrelchat/opaque-wasm-client'
-
-// REGISTRATION
-const registration = startRegistration('my sup€r sekure passw0rd! uwu')
-const response = sendToServerAndGetResponse(registration.request)
-
-const { exportKey, serverPublicKey, record } = registration.finish(response)
-sendRegistrationToServer(record)
-
-console.log('export key:', exportKey)
-console.log('server public key:', serverPublicKey)
-
-// LOGIN
-const login = startLogin('my sup€r sekure passw0rd! uwu')
-const response = sendToServerAndGetResponse(login.request)
-
-const { exportKey, sessionKey, serverPublicKey, message } = registration.finish(response)
-sendAuthenticationToServer(message)
-
-console.log('export key:', exportKey)
-console.log('session key:', sessionKey)
-console.log('server public key:', serverPublicKey)
-```
-
-### Server
-```js
-import { Server } from '@squirrelchat/opaque-wasm-server'
-
-// Create a server
-// -> First time
-const server = new Server()
-saveStateSomewhereSave(server.getState())
-// -> Future times
-const server = new Server(getSavedState())
-
-// The state MUST be stored and restored, otherwise
-// logging in will not work after a server restart.
-
-// REGISTRATION
-const { username, request } = receiveRequestFromClient()
-const response = server.startRegistration(username, request)
-
-const record = sendResponseToClientAndGetRecord(response)
-const credentials = server.finishRegistration(record)
-saveCredentialsInDatabase(username, credentials)
-
-// LOGIN
-const { username, request } = receiveRequestFromClient()
-const { response, state } = server.startLogin(username, request, row?.credentials)
-
-const authentication = sendResponseToClientAndGetFinalMessage(response)
-const sessionKey = server.finishLogin(state, authentication)
-
-console.log('session key:', sessionKey)
-```
+A complete example (client + server) is available in the [`example`](example) folder, with a lot of comments to guide
+you through.
 
 ## Credits where due
 This wrapper is inspired from prior work at [marucjmar/opaque-wasm](https://github.com/marucjmar/opaque-wasm). The

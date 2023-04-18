@@ -33,14 +33,22 @@ _fix-typescript:
 # Have I mentioned how much of a [redacted] [redacted] piece of [redacted] wasm-pack [redacted] is?
 # https://github.com/rustwasm/wasm-pack/issues/1193 (Nov 13, 2022)
 # https://github.com/rustwasm/wasm-pack/pull/1194 (Nov 13, 2022) - PR still not merged :D
+# https://github.com/rustwasm/wasm-pack/pull/1061 (Sep 23, 2021)
+# https://github.com/rustwasm/wasm-pack/pull/1089 (Dec 5, 2021)
+# At this point I'm close to believing wasm-pack is unmaintained. [clown emoji]
 _fix-package-json:
 	#!/usr/bin/env node
 	const { readFileSync, writeFileSync } = require('fs')
 	let clientPackage = readFileSync('client/pkg/package.json', 'utf8')
 	let serverPackage = readFileSync('server/pkg/package.json', 'utf8')
 
+	// Add wasm types
 	clientPackage = clientPackage.replace('.d.ts"', '.d.ts",\n    "opaque_wasm_client_bg.wasm.d.ts"')
 	serverPackage = serverPackage.replace('.d.ts"', '.d.ts",\n    "opaque_wasm_server_bg.wasm.d.ts"')
+
+	// Fix package.json
+	clientPackage = clientPackage.replace('"main"', '"type": "module",\n  "main"')
+	serverPackage = serverPackage.replace('"main"', '"type": "module",\n  "main"')
 
 	writeFileSync('client/pkg/package.json', clientPackage)
 	writeFileSync('server/pkg/package.json', serverPackage)
