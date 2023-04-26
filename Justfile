@@ -48,7 +48,7 @@ _fix-package-json:
 
 	// Fix package.json
 	clientPackage = clientPackage.replace('"main"', '"type": "module",\n  "main"')
-	serverPackage = serverPackage.replace('"main"', '"type": "module",\n  "main"')
+	// serverPackage = serverPackage.replace('"main"', '"type": "module",\n  "main"')
 
 	writeFileSync('client/pkg/package.json', clientPackage)
 	writeFileSync('server/pkg/package.json', serverPackage)
