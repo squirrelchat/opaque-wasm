@@ -47,7 +47,7 @@ _fix-package-json:
 	serverPackage = serverPackage.replace('.d.ts"', '.d.ts",\n    "opaque_wasm_server_bg.wasm.d.ts"')
 
 	// Fix package.json
-	clientPackage = clientPackage.replace('"main"', '"type": "module",\n  "main"')
+	clientPackage = clientPackage.replace('"module"', '"type": "module",\n  "main"')
 	// serverPackage = serverPackage.replace('"main"', '"type": "module",\n  "main"')
 
 	writeFileSync('client/pkg/package.json', clientPackage)
